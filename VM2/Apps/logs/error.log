@@ -1,0 +1,58 @@
+[2024-09-28 00:08:43 +0000] [37374] [INFO] Starting gunicorn 23.0.0
+[2024-09-28 00:08:43 +0000] [37374] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2024-09-28 00:08:43 +0000] [37374] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+[2024-09-28 00:08:44 +0000] [37374] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2024-09-28 00:08:44 +0000] [37374] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+[2024-09-28 00:08:45 +0000] [37374] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2024-09-28 00:08:45 +0000] [37374] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+[2024-09-28 00:08:46 +0000] [37374] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2024-09-28 00:08:46 +0000] [37374] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+[2024-09-28 00:08:47 +0000] [37374] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2024-09-28 00:08:47 +0000] [37374] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+[2024-09-28 00:08:48 +0000] [37374] [ERROR] Can't connect to ('0.0.0.0', 5000)
+[2024-09-28 03:16:02 +0000] [37512] [INFO] Starting gunicorn 23.0.0
+[2024-09-28 03:16:02 +0000] [37512] [INFO] Listening at: http://0.0.0.0:5000 (37512)
+[2024-09-28 03:16:02 +0000] [37512] [INFO] Using worker: sync
+[2024-09-28 03:16:02 +0000] [37513] [INFO] Booting worker with pid: 37513
+[2024-09-28 03:16:02 +0000] [37513] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+    worker.init_process()
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/workers/base.py", line 135, in init_process
+    self.load_wsgi()
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/app/base.py", line 66, in wsgi
+    self.callable = self.load()
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+    return self.load_wsgiapp()
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/cc/.local/lib/python3.10/site-packages/gunicorn/util.py", line 370, in import_app
+    mod = importlib.import_module(module)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'flask_app'
+[2024-09-28 03:16:02 +0000] [37513] [INFO] Worker exiting (pid: 37513)
+[2024-09-28 03:16:02 +0000] [37512] [ERROR] Worker (pid:37513) exited with code 3
+[2024-09-28 03:16:02 +0000] [37512] [ERROR] Shutting down: Master
+[2024-09-28 03:16:02 +0000] [37512] [ERROR] Reason: Worker failed to boot.
+[2024-09-28 04:06:51 +0000] [37769] [INFO] Starting gunicorn 23.0.0
+[2024-09-28 04:06:51 +0000] [37769] [INFO] Listening at: http://0.0.0.0:5000 (37769)
+[2024-09-28 04:06:51 +0000] [37769] [INFO] Using worker: sync
+[2024-09-28 04:06:51 +0000] [37770] [INFO] Booting worker with pid: 37770
+[2024-09-28 04:06:51 +0000] [37771] [INFO] Booting worker with pid: 37771
+[2024-09-28 04:06:51 +0000] [37772] [INFO] Booting worker with pid: 37772
+[2024-09-28 04:08:19 +0000] [37769] [INFO] Handling signal: winch
+[2024-09-28 04:09:30 +0000] [37769] [INFO] Handling signal: int
+[2024-09-28 04:09:30 +0000] [37772] [INFO] Worker exiting (pid: 37772)
+[2024-09-28 04:09:30 +0000] [37770] [INFO] Worker exiting (pid: 37770)
+[2024-09-28 04:09:30 +0000] [37771] [INFO] Worker exiting (pid: 37771)
+[2024-09-28 04:09:32 +0000] [37769] [INFO] Shutting down: Master
