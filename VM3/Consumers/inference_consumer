@@ -1,0 +1,59 @@
+from kafka import KafkaConsumer
+import json
+import requests
+
+# Kafka consumer configuration
+KAFKA_TOPIC = 'iot_images'
+KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'  
+
+INFERENCE_SERVER = 'http://192.168.5.56:5000'
+
+# Kafka consumer instance
+consumer = KafkaConsumer(
+    KAFKA_TOPIC,
+    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+print("Inference-Consumer is running and listening for messages...")
+
+def send_to_inference_server(image_data):
+    """Send the image data to the inference server and get the prediction."""
+    try:
+        response = requests.post(
+            INFERENCE_SERVER,
+            json={'image': image_data['image']}
+        )
+        response.raise_for_status()
+        prediction = response.json()['prediction']
+        return prediction
+    except requests.exceptions.RequestException as e:
+        print(f"Error while contacting the inference server: {e}")
+        return None
+
+def process_and_infer_image_data(message):
+    """Take pulled data and send it for inference."""
+    image_id = message['image_id']
+    image_data = message['image_data']  # Assume this is a base64 encoded image or some encoded format
+    ground_truth = message['ground_truth']
+
+    # Send image to inference server
+    print(f"Sending image {image_id} to inference server...")
+    prediction = send_to_inference_server(image_data)
+
+    if prediction is not None:
+        print(f"Inference for image_id {image_id}: {prediction}")
+        # You can add logic here to store the prediction, log it, or take action based on it
+    else:
+        print(f"Failed to get inference for image_id {image_id}")
+
+try:
+    for message in consumer:
+        print(f"Received message: {message.value}")
+        process_and_infer_image_data(message.value)
+
+except KeyboardInterrupt:
+    print("Consumer stopped manually.")
+finally:
+    consumer.close()
+    print("Consumer closed.")

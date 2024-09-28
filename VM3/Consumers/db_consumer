@@ -1,0 +1,57 @@
+from kafka import KafkaConsumer
+import json
+from pymongo import MongoClient
+
+KAFKA_TOPIC = 'iot_images'
+
+# MongoDB connection
+client = MongoClient('mongodb://192.168.5.206:27017/')  # Connect to MongoDB
+db = client.iot_database  # Database name
+collection = db.image_data  # Collection name (like a table in SQL databases)
+
+# Kafka consumer instance
+consumer = KafkaConsumer(
+    KAFKA_TOPIC,
+    bootstrap_servers='192.168.5.22:9092',
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+print("DB-Consumer is running and listening for messages...")
+
+def process_and_store_image_data(message):
+    image_id = message['image_id']
+    image_data = message['image_data']
+    ground_truth = message['ground_truth']
+
+    # Check if the image data already exists (for update)
+    existing_record = collection.find_one({'image_id': image_id})
+
+    if existing_record:
+        # If exists, update the record
+        collection.update_one(
+            {'image_id': image_id},
+            {'$set': {'image_data': image_data, 'ground_truth': ground_truth, 'processed': False}}
+        )
+        print(f"Updated record for image_id: {image_id}")
+    else:
+        # If not, insert a new record
+        collection.insert_one({
+            'image_id': image_id,
+            'image_data': image_data,
+            'ground_truth': ground_truth,
+            'processed': False
+        })
+        print(f"Inserted new record for image_id: {image_id}")
+
+# Consume messages from Kafka
+try:
+    for message in consumer:
+        print(f"Received message: {message.value}")
+        process_and_store_image_data(message.value)
+
+except KeyboardInterrupt:
+    print("Consumer stopped manually.")
+finally:
+    consumer.close()
+    client.close()
+    print("DB connection and consumer closed.")
